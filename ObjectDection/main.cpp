@@ -10,8 +10,8 @@ using namespace cv;
 using namespace dnn;
 
 // Initialize the parameters
-float confThreshold = 0.5; // Confidence threshold
-float nmsThreshold = 0.4;  // Non-maximum suppression threshold
+float confThreshold = 0.2; // Confidence threshold
+float nmsThreshold = 0.1;  // Non-maximum suppression threshold
 int inpWidth = 416;        // Width of network's input image
 int inpHeight = 416;       // Height of network's input image
 vector<string> classes;
@@ -107,8 +107,8 @@ int main(int argc, const char * argv[]) {
     while (getline(ifs, line)) classes.push_back(line);
     
     // Give the configuration and weight files for the model
-    String modelConfiguration = "yolov3.cfg";
-    String modelWeights = "yolov3.weights";
+    String modelConfiguration = "yolov3-tiny.cfg";
+    String modelWeights = "yolov3-tiny.weights";
     
     // Load the network
     Net net = readNetFromDarknet(modelConfiguration, modelWeights);
@@ -129,23 +129,29 @@ int main(int argc, const char * argv[]) {
         return -1;
     }
     
+    int framecount = 0;
+    int modelInterval = 1;
     while (true) {
         
         //Read an image from the camera.
         capture.read(cameraFrame);
         
-        // Create a 4D blob from a frame.
-        blobFromImage(cameraFrame, blob, 1/255.0, cvSize(inpWidth, inpHeight), Scalar(0,0,0), true, false);
+        if (framecount % modelInterval == 0){
+            // Create a 4D blob from a frame.
+            blobFromImage(cameraFrame, blob, 1/255.0, cvSize(inpWidth, inpHeight), Scalar(0,0,0), true, false);
+            
+            //Sets the input to the network
+            net.setInput(blob);
+            
+            // Runs the forward pass to get output of the output layers
+            vector<Mat> outs;
+            net.forward(outs, getOutputsNames(net));
+            
+            // Remove the bounding boxes with low confidence
+            postprocess(cameraFrame, outs);
+        }
         
-        //Sets the input to the network
-        net.setInput(blob);
-        
-        // Runs the forward pass to get output of the output layers
-        vector<Mat> outs;
-        net.forward(outs, getOutputsNames(net));
-        
-        // Remove the bounding boxes with low confidence
-        postprocess(cameraFrame, outs);
+        framecount++;
         
         //make window half the size
         resize(cameraFrame, cameraFrame, Size(cameraFrame.cols/2, cameraFrame.rows/2));
