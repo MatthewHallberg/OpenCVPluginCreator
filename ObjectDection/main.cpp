@@ -11,11 +11,61 @@ using namespace dnn;
 
 // Initialize the parameters
 float confThreshold = 0.2; // Confidence threshold
-float nmsThreshold = 0.1;  // Non-maximum suppression threshold
+float nmsThreshold = .1;  // Non-maximum suppression threshold
 int inpWidth = 416;        // Width of network's input image
 int inpHeight = 416;       // Height of network's input image
+
 vector<string> classes;
 Mat blob;
+
+void DrawDection(string label, Rect rect, Mat& frame){
+    rectangle(frame, rect, Scalar(0, 0, 255),5);
+    //Display the label at the top of the bounding box
+    putText(frame, label, Point(rect.x, rect.y), FONT_HERSHEY_SIMPLEX, 2, Scalar(0,0,255),3);
+}
+
+class Detection {
+    public:
+        string label;
+        Rect2d box;
+        Rect2d trackingBox;
+        Ptr<Tracker> tracker;
+    
+        Detection(string objectName, Rect boundingBox,Mat& frame){
+            label = objectName;
+            box = boundingBox;
+            trackingBox = box;
+            tracker = TrackerKCF::create();
+            tracker->init(frame, trackingBox);
+        }
+    
+        void Draw(Mat& frame){
+            DrawDection(label,box,frame);
+        }
+    
+        void UpdateTracker(Mat& frame){
+          tracker->update(frame, trackingBox);
+            DrawDection(label,trackingBox,frame);
+        }
+};
+
+vector<Detection> detections;
+
+// Draw the predicted bounding box
+void drawPred(int classId, float conf, int left, int top, int right, int bottom, Mat& frame){
+    //Draw a rectangle displaying the bounding box
+    Rect rect(left, top, right - left, bottom - top);
+    //Get the label for the class name and its confidence
+    string label;// = format("%.2f", conf);
+    if (!classes.empty()){
+        CV_Assert(classId < (int)classes.size());
+        label = classes[classId];// + ":" + label;
+    }
+    //add to current list
+    Detection det = Detection(label,rect,frame);
+    det.Draw(frame);
+    detections.push_back(det);
+}
 
 // Get the names of the output layers
 vector<String> getOutputsNames(const Net& net){
@@ -33,25 +83,6 @@ vector<String> getOutputsNames(const Net& net){
             names[i] = layersNames[outLayers[i] - 1];
     }
     return names;
-}
-
-// Draw the predicted bounding box
-void drawPred(int classId, float conf, int left, int top, int right, int bottom, Mat& frame){
-    //Draw a rectangle displaying the bounding box
-    rectangle(frame, Point(left, top), Point(right, bottom), Scalar(0, 0, 255));
-    
-    //Get the label for the class name and its confidence
-    string label = format("%.2f", conf);
-    if (!classes.empty()){
-        CV_Assert(classId < (int)classes.size());
-        label = classes[classId] + ":" + label;
-    }
-    
-    //Display the label at the top of the bounding box
-    int baseLine;
-    Size labelSize = getTextSize(label, FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
-    top = max(top, labelSize.height);
-    putText(frame, label, Point(left, top), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(255,255,255));
 }
 
 // Remove the bounding boxes with low confidence using non-maxima suppression
@@ -130,13 +161,19 @@ int main(int argc, const char * argv[]) {
     }
     
     int framecount = 0;
-    int modelInterval = 1;
+    int modelInterval = 15;
     while (true) {
         
         //Read an image from the camera.
         capture.read(cameraFrame);
         
         if (framecount % modelInterval == 0){
+            
+            cout << "detecting: " << framecount << endl;
+            
+            //clear detections
+            detections.clear();
+            
             // Create a 4D blob from a frame.
             blobFromImage(cameraFrame, blob, 1/255.0, cvSize(inpWidth, inpHeight), Scalar(0,0,0), true, false);
             
@@ -149,6 +186,11 @@ int main(int argc, const char * argv[]) {
             
             // Remove the bounding boxes with low confidence
             postprocess(cameraFrame, outs);
+        } else {
+            //loop through all detections and track
+            for(int i = 0; i < detections.size(); i++){
+                detections[i].UpdateTracker(cameraFrame);
+            }
         }
         
         framecount++;
