@@ -35,17 +35,25 @@ class Detection {
             label = objectName;
             box = boundingBox;
             trackingBox = box;
+            //best tracker but performance goes to shit (worth testing on device?)
+            //tracker = TrackerCSRT::create();
             tracker = TrackerKCF::create();
             tracker->init(frame, trackingBox);
+        }
+    
+        void Destroy(){
+            tracker.release();
+            delete tracker;
         }
     
         void Draw(Mat& frame){
             DrawDection(label,box,frame);
         }
     
-        void UpdateTracker(Mat& frame){
-          tracker->update(frame, trackingBox);
-            DrawDection(label,trackingBox,frame);
+        bool UpdateTracker(Mat& frame){
+            bool success = tracker->update(frame, trackingBox);
+            if (success) DrawDection(label,trackingBox,frame);
+            return success;
         }
 };
 
@@ -161,7 +169,7 @@ int main(int argc, const char * argv[]) {
     }
     
     int framecount = 0;
-    int modelInterval = 15;
+    int modelInterval = 10;
     while (true) {
         
         //Read an image from the camera.
@@ -169,9 +177,10 @@ int main(int argc, const char * argv[]) {
         
         if (framecount % modelInterval == 0){
             
-            cout << "detecting: " << framecount << endl;
-            
-            //clear detections
+            //loop through all detections and clear
+            for(int i = 0; i < detections.size(); i++){
+                detections[i].Destroy();
+            }
             detections.clear();
             
             // Create a 4D blob from a frame.
@@ -189,7 +198,10 @@ int main(int argc, const char * argv[]) {
         } else {
             //loop through all detections and track
             for(int i = 0; i < detections.size(); i++){
-                detections[i].UpdateTracker(cameraFrame);
+                //if tracking lost remove from list
+                if (!detections[i].UpdateTracker(cameraFrame)){
+                    detections.erase(detections.begin() + i);
+                }
             }
         }
         
