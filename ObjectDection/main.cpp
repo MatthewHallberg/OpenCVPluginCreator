@@ -4,6 +4,7 @@
 #include "opencv2/features2d.hpp"
 #include "opencv2/tracking.hpp"
 #include "opencv2/core/ocl.hpp"
+#include <thread>
 
 using namespace std;
 using namespace cv;
@@ -11,10 +12,12 @@ using namespace dnn;
 
 // Initialize the parameters
 float confThreshold = 0.2; // Confidence threshold
-float nmsThreshold = .1;  // Non-maximum suppression threshold
+float nmsThreshold = .01;  // Non-maximum suppression threshold
 int inpWidth = 416;        // Width of network's input image
 int inpHeight = 416;       // Height of network's input image
 
+vector<Mat> networkOutput;
+Net net;
 vector<string> classes;
 Mat blob;
 
@@ -129,11 +132,44 @@ void postprocess(Mat& frame, const vector<Mat>& outs){
     // lower confidences
     vector<int> indices;
     NMSBoxes(boxes, confidences, confThreshold, nmsThreshold, indices);
+    
+    //loop through all current detections and clear
+    for(int i = 0; i < detections.size(); i++){
+        detections[i].Destroy();
+    }
+    detections.clear();
+    
     for (size_t i = 0; i < indices.size(); ++i){
         int idx = indices[i];
         Rect box = boxes[idx];
         drawPred(classIds[idx], confidences[idx], box.x, box.y,
                  box.x + box.width, box.y + box.height, frame);
+    }
+}
+
+void RunModel(Mat& frame){
+    // Create a 4D blob from a frame.
+    blob.deallocate();
+    blobFromImage(frame, blob, 1/255.0, cvSize(inpWidth, inpHeight), Scalar(0,0,0), true, false);
+    
+    //Sets the input to the network
+    net.setInput(blob);
+    
+    // Runs the forward pass to get output of the output layers
+    net.forward(networkOutput, getOutputsNames(net));
+    
+    // Remove the bounding boxes with low confidence
+    postprocess(frame, networkOutput);    
+}
+
+void TrackDetections(Mat& frame){
+    //loop through all detections and track
+    for(int i = 0; i < detections.size(); i++){
+        //if tracking lost remove from list
+        if (!detections[i].UpdateTracker(frame)){
+            detections[i].Destroy();
+            detections.erase(detections.begin() + i);
+        }
     }
 }
 
@@ -150,19 +186,13 @@ int main(int argc, const char * argv[]) {
     String modelWeights = "yolov3-tiny.weights";
     
     // Load the network
-    Net net = readNetFromDarknet(modelConfiguration, modelWeights);
+    net = readNetFromDarknet(modelConfiguration, modelWeights);
     net.setPreferableBackend(DNN_BACKEND_OPENCV);
     net.setPreferableTarget(DNN_TARGET_CPU);
     
-    //Capture stream from webcam.
-    VideoCapture capture(0);
-    
-    //This variable will hold the image from the camera.
-    Mat cameraFrame;
-    //Read an image from the camera.
-    capture.read(cameraFrame);
-    
     //Check if we can get the webcam stream.
+    Mat cameraFrame;
+    VideoCapture capture(0);
     if(!capture.isOpened()) {
         cout << "Could not open camera" << std::endl;
         return -1;
@@ -171,38 +201,12 @@ int main(int argc, const char * argv[]) {
     int framecount = 0;
     int modelInterval = 10;
     while (true) {
-        
-        //Read an image from the camera.
         capture.read(cameraFrame);
         
         if (framecount % modelInterval == 0){
-            
-            //loop through all detections and clear
-            for(int i = 0; i < detections.size(); i++){
-                detections[i].Destroy();
-            }
-            detections.clear();
-            
-            // Create a 4D blob from a frame.
-            blobFromImage(cameraFrame, blob, 1/255.0, cvSize(inpWidth, inpHeight), Scalar(0,0,0), true, false);
-            
-            //Sets the input to the network
-            net.setInput(blob);
-            
-            // Runs the forward pass to get output of the output layers
-            vector<Mat> outs;
-            net.forward(outs, getOutputsNames(net));
-            
-            // Remove the bounding boxes with low confidence
-            postprocess(cameraFrame, outs);
+            RunModel(cameraFrame);
         } else {
-            //loop through all detections and track
-            for(int i = 0; i < detections.size(); i++){
-                //if tracking lost remove from list
-                if (!detections[i].UpdateTracker(cameraFrame)){
-                    detections.erase(detections.begin() + i);
-                }
-            }
+            TrackDetections(cameraFrame);
         }
         
         framecount++;
@@ -211,7 +215,7 @@ int main(int argc, const char * argv[]) {
         resize(cameraFrame, cameraFrame, Size(cameraFrame.cols/2, cameraFrame.rows/2));
         namedWindow( "Camera", WINDOW_AUTOSIZE);
         imshow("Camera", cameraFrame);
-        
+
         if (waitKey(50) >= 0)
             break;
     }
