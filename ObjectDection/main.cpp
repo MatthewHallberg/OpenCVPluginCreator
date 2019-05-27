@@ -13,8 +13,8 @@ using namespace dnn;
 // Initialize the parameters
 float confThreshold = 0.2; // Confidence threshold
 float nmsThreshold = .01;  // Non-maximum suppression threshold
-int inpWidth = 416;        // Width of network's input image
-int inpHeight = 416;       // Height of network's input image
+int inpWidth = 416;        // was 416 Width of network's input image
+int inpHeight = 416;       // was  416 Height of network's input image
 
 vector<Mat> networkOutput;
 Net net;
