@@ -1,10 +1,9 @@
+#include <stdio.h>
 #include <iostream>
 #include <opencv2/opencv.hpp>
-#include "opencv2/xfeatures2d.hpp"
-#include "opencv2/features2d.hpp"
-#include "opencv2/tracking.hpp"
-#include "opencv2/core/ocl.hpp"
-#include <thread>
+#include <opencv2/tracking.hpp>
+#include <opencv2/dnn.hpp>
+#include <unistd.h>
 
 using namespace std;
 using namespace cv;
@@ -16,47 +15,125 @@ float nmsThreshold = .01;  // Non-maximum suppression threshold
 int inpWidth = 416;        // was 416 Width of network's input image
 int inpHeight = 416;       // was  416 Height of network's input image
 
+//darknet
 vector<Mat> networkOutput;
 Net net;
 vector<string> classes;
 Mat blob;
 
-void DrawDection(string label, Rect rect, Mat& frame){
-    rectangle(frame, rect, Scalar(0, 0, 255),5);
+//optical flow
+TermCriteria termcrit(TermCriteria::COUNT|TermCriteria::EPS,40,0.0001);
+vector<Point2f> fullFrameDetectionPoints;
+Mat cameraFrame;
+Mat previousCamFrame;
+cv::Ptr<cv::DescriptorExtractor> extractor = cv::ORB::create(100);
+
+void ExtractPointsFromFrame(Mat& frame){
+    
+    //get features we will track for optical flow
+    cv::goodFeaturesToTrack(frame,// input, the image from which we want to know good features to track
+                            fullFrameDetectionPoints,    // output, the points will be stored in this output vector
+                            500,                  // max points, maximum number of good features to track
+                            0.1,                // quality level, "minimal accepted quality of corners", the lower the more points we will get
+                            .01,                  // minDistance, minimum distance between points
+                            Mat(),               // mask
+                            5,                   // block size
+                            false,              // useHarrisDetector, makes tracking a bit better when set to true
+                            0.01                 // free parameter for harris detector
+                            );
+}
+
+void DrawDetection(string label, Rect rect){
+    rectangle(cameraFrame, rect, Scalar(0, 0, 255),5);
     //Display the label at the top of the bounding box
-    putText(frame, label, Point(rect.x, rect.y), FONT_HERSHEY_SIMPLEX, 2, Scalar(0,0,255),3);
+    putText(cameraFrame, label, Point(rect.x, rect.y), FONT_HERSHEY_SIMPLEX, 2, Scalar(0,0,255),3);
 }
 
 class Detection {
     public:
         string label;
         Rect2d box;
-        Rect2d trackingBox;
-        Ptr<Tracker> tracker;
+        vector<Point2f> previousKeyPoints;
     
         Detection(string objectName, Rect boundingBox,Mat& frame){
             label = objectName;
             box = boundingBox;
-            trackingBox = box;
-            //best tracker but performance goes to shit (worth testing on device?)
-            //tracker = TrackerCSRT::create();
-            tracker = TrackerKCF::create();
-            tracker->init(frame, trackingBox);
         }
     
         void Destroy(){
-            tracker.release();
-            delete tracker;
+            //PUT SOMETHING HERE!!! DONT FORGET TO DELEtE WHAT YOU CREATE
         }
     
-        void Draw(Mat& frame){
-            DrawDection(label,box,frame);
+        void Draw(){
+            DrawDetection(label,box);
+        }
+    
+    float clamp(float n, float lower, float upper) {
+        return std::max(lower, std::min(n, upper));
+    }
+    
+        void StartTracker(Mat& frame){
+            //make sure box is within image
+            box.x = clamp(box.x,0,frame.cols);
+            box.y = clamp(box.y,0,frame.rows);
+            
+            if (box.y + box.height > frame.rows){
+                box.height = frame.rows - box.y;
+            }
+            
+            if (box.x + box.width > frame.cols){
+                box.width = frame.cols - box.x;
+            }
+            
+            //first extract keypoints from detection portion of image
+            Mat cropped = frame(box);
+            if (cropped.cols > 1 && cropped.rows > 1){
+                std::vector<cv::KeyPoint> detectedKeypoints;
+                Mat detectedDescriptors;
+                extractor->detectAndCompute(cropped, noArray(), detectedKeypoints, detectedDescriptors);
+                //find common points with goodfeatures to track and add to good points
+                for( int i = 0; i < fullFrameDetectionPoints.size(); i++ ) {
+                    if (fullFrameDetectionPoints[i].x > box.x && fullFrameDetectionPoints[i].x < box.x + box.width &&
+                        fullFrameDetectionPoints[i].y > box.y && fullFrameDetectionPoints[i].y < box.y + box.height){
+                        previousKeyPoints.push_back(fullFrameDetectionPoints[i]);
+                    }
+                }
+            }
         }
     
         bool UpdateTracker(Mat& frame){
-            bool success = tracker->update(frame, trackingBox);
-            if (success) DrawDection(label,trackingBox,frame);
-            return success;
+            if(previousKeyPoints.size() < 3){
+                StartTracker(frame);
+            }
+            
+            if(previousKeyPoints.size() > 0){
+                vector<uchar> status;
+                vector<float> err;
+                vector<Point2f> flowDectionPoints;
+                
+                cv::calcOpticalFlowPyrLK(previousCamFrame,     // prev image
+                                         frame,          // curr image
+                                         previousKeyPoints,           // find these points in the new image
+                                         flowDectionPoints,           // result of found points
+                                         status,               // output status vector, found points are set to 1
+                                         err,                // each point gets an error value (see flag)
+                                         cv::Size(80, 80),     // size of the window at each pyramid level
+                                         4,                    // maxLevel - 0 = no pyramids, > 0 use this level of pyramids
+                                         termcrit,             // termination criteria
+                                         0.1,                    // flags OPTFLOW_USE_INITIAL_FLOW or OPTFLOW_LK_GET_MIN_EIGENVALS
+                                         0.01                   // minEigThreshold
+                                         );
+                
+                //draw box from optical flow points
+                Rect matchBounds = boundingRect(flowDectionPoints);
+                box = matchBounds;
+                DrawDetection(label,box);
+                swap(previousKeyPoints, flowDectionPoints);
+
+                return true;
+            } else {
+                return false;
+            }
         }
 };
 
@@ -74,7 +151,7 @@ void drawPred(int classId, float conf, int left, int top, int right, int bottom,
     }
     //add to current list
     Detection det = Detection(label,rect,frame);
-    det.Draw(frame);
+    det.Draw();
     detections.push_back(det);
 }
 
@@ -191,31 +268,39 @@ int main(int argc, const char * argv[]) {
     net.setPreferableTarget(DNN_TARGET_CPU);
     
     //Check if we can get the webcam stream.
-    Mat cameraFrame;
     VideoCapture capture(0);
-    if(!capture.isOpened()) {
-        cout << "Could not open camera" << std::endl;
-        return -1;
+    while(!capture.isOpened()) {
+        cout << "Opening Camera" << std::endl;
+        usleep(1000000);
     }
     
     int framecount = 0;
-    int modelInterval = 10;
+    int modelInterval = 15;
     while (true) {
         capture.read(cameraFrame);
         
-        if (framecount % modelInterval == 0){
-            RunModel(cameraFrame);
-        } else {
-            TrackDetections(cameraFrame);
+        if (cameraFrame.cols > 100){
+            
+            if (framecount % modelInterval == 0){
+                fullFrameDetectionPoints.clear();
+                RunModel(cameraFrame);
+            } else {
+                Mat grayFrame;
+                cvtColor(cameraFrame, grayFrame, CV_RGB2GRAY);
+                if (previousCamFrame.rows < 100){
+                    grayFrame.copyTo(previousCamFrame);
+                }
+                ExtractPointsFromFrame(grayFrame);
+                TrackDetections(grayFrame);
+                grayFrame.copyTo(previousCamFrame);
+            }
+            framecount++;
         }
-        
-        framecount++;
-        
         //make window half the size
         resize(cameraFrame, cameraFrame, Size(cameraFrame.cols/2, cameraFrame.rows/2));
         namedWindow( "Camera", WINDOW_AUTOSIZE);
         imshow("Camera", cameraFrame);
-
+        
         if (waitKey(50) >= 0)
             break;
     }
