@@ -53,6 +53,7 @@
 		2225B78D22B9B82B00B71AA2 /* MediaLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaLibrary.framework; path = System/Library/Frameworks/MediaLibrary.framework; sourceTree = SDKROOT; };
 		2225B79122B9BB4B00B71AA2 /* MediaToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaToolbox.framework; path = System/Library/Frameworks/MediaToolbox.framework; sourceTree = SDKROOT; };
 		2225B79322B9BB7B00B71AA2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		226B07CE22DAB03200F10208 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		229703E3223E2DED00240DF2 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
 		229703E6223E2DED00240DF2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				229703E6223E2DED00240DF2 /* main.cpp */,
+				226B07CE22DAB03200F10208 /* Info.plist */,
 			);
 			path = ObjectDection;
 			sourceTree = "<group>";
@@ -316,7 +318,7 @@
 				DEVELOPMENT_TEAM = TJ3U68QPD9;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "";
+				INFOPLIST_FILE = "$(SRCROOT)/ObjectDection/Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_LDFLAGS = "-ObjC";
@@ -333,7 +335,7 @@
 				DEVELOPMENT_TEAM = TJ3U68QPD9;
 				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "";
+				INFOPLIST_FILE = "$(SRCROOT)/ObjectDection/Info.plist";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				OTHER_LDFLAGS = "-ObjC";
