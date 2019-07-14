@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2225B77122B9B02600B71AA2 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B77022B9B02600B71AA2 /* opencv2.framework */; };
+		2225B77422B9B0A500B71AA2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B77322B9B0A500B71AA2 /* Accelerate.framework */; };
+		2225B77622B9B0AB00B71AA2 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B77522B9B0AB00B71AA2 /* OpenCL.framework */; };
+		2225B77822B9B1AE00B71AA2 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B77722B9B1AE00B71AA2 /* AVFoundation.framework */; };
+		2225B77A22B9B21500B71AA2 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B77922B9B21500B71AA2 /* CoreFoundation.framework */; };
+		2225B77C22B9B24600B71AA2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B77B22B9B24600B71AA2 /* CoreGraphics.framework */; };
+		2225B77E22B9B26700B71AA2 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B77D22B9B26700B71AA2 /* CoreMedia.framework */; };
+		2225B78022B9B29F00B71AA2 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B77F22B9B29F00B71AA2 /* CoreVideo.framework */; };
+		2225B78522B9B57400B71AA2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B78422B9B57400B71AA2 /* Foundation.framework */; };
+		2225B78922B9B7EC00B71AA2 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B78822B9B7EC00B71AA2 /* CoreImage.framework */; };
+		2225B78B22B9B7FD00B71AA2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B78A22B9B7FD00B71AA2 /* QuartzCore.framework */; };
+		2225B79022B9BB4A00B71AA2 /* MediaAccessibility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B78C22B9B82B00B71AA2 /* MediaAccessibility.framework */; };
+		2225B79422B9BB7B00B71AA2 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B79322B9BB7B00B71AA2 /* AppKit.framework */; };
 		229703E7223E2DED00240DF2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 229703E6223E2DED00240DF2 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +36,23 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2225B77022B9B02600B71AA2 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../Desktop/osx/opencv2.framework; sourceTree = "<group>"; };
+		2225B77322B9B0A500B71AA2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		2225B77522B9B0AB00B71AA2 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
+		2225B77722B9B1AE00B71AA2 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		2225B77922B9B21500B71AA2 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		2225B77B22B9B24600B71AA2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2225B77D22B9B26700B71AA2 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		2225B77F22B9B29F00B71AA2 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		2225B78122B9B30400B71AA2 /* IOBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOBluetooth.framework; path = System/Library/Frameworks/IOBluetooth.framework; sourceTree = SDKROOT; };
+		2225B78422B9B57400B71AA2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		2225B78622B9B63800B71AA2 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		2225B78822B9B7EC00B71AA2 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		2225B78A22B9B7FD00B71AA2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		2225B78C22B9B82B00B71AA2 /* MediaAccessibility.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaAccessibility.framework; path = System/Library/Frameworks/MediaAccessibility.framework; sourceTree = SDKROOT; };
+		2225B78D22B9B82B00B71AA2 /* MediaLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaLibrary.framework; path = System/Library/Frameworks/MediaLibrary.framework; sourceTree = SDKROOT; };
+		2225B79122B9BB4B00B71AA2 /* MediaToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaToolbox.framework; path = System/Library/Frameworks/MediaToolbox.framework; sourceTree = SDKROOT; };
+		2225B79322B9BB7B00B71AA2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		229703E3223E2DED00240DF2 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
 		229703E6223E2DED00240DF2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -32,17 +62,55 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2225B79422B9BB7B00B71AA2 /* AppKit.framework in Frameworks */,
+				2225B79022B9BB4A00B71AA2 /* MediaAccessibility.framework in Frameworks */,
+				2225B77822B9B1AE00B71AA2 /* AVFoundation.framework in Frameworks */,
+				2225B78B22B9B7FD00B71AA2 /* QuartzCore.framework in Frameworks */,
+				2225B78922B9B7EC00B71AA2 /* CoreImage.framework in Frameworks */,
+				2225B78522B9B57400B71AA2 /* Foundation.framework in Frameworks */,
+				2225B77122B9B02600B71AA2 /* opencv2.framework in Frameworks */,
+				2225B78022B9B29F00B71AA2 /* CoreVideo.framework in Frameworks */,
+				2225B77E22B9B26700B71AA2 /* CoreMedia.framework in Frameworks */,
+				2225B77C22B9B24600B71AA2 /* CoreGraphics.framework in Frameworks */,
+				2225B77A22B9B21500B71AA2 /* CoreFoundation.framework in Frameworks */,
+				2225B77622B9B0AB00B71AA2 /* OpenCL.framework in Frameworks */,
+				2225B77422B9B0A500B71AA2 /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2225B77222B9B0A500B71AA2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2225B79322B9BB7B00B71AA2 /* AppKit.framework */,
+				2225B79122B9BB4B00B71AA2 /* MediaToolbox.framework */,
+				2225B78C22B9B82B00B71AA2 /* MediaAccessibility.framework */,
+				2225B78D22B9B82B00B71AA2 /* MediaLibrary.framework */,
+				2225B78A22B9B7FD00B71AA2 /* QuartzCore.framework */,
+				2225B78822B9B7EC00B71AA2 /* CoreImage.framework */,
+				2225B78622B9B63800B71AA2 /* ApplicationServices.framework */,
+				2225B78422B9B57400B71AA2 /* Foundation.framework */,
+				2225B78122B9B30400B71AA2 /* IOBluetooth.framework */,
+				2225B77F22B9B29F00B71AA2 /* CoreVideo.framework */,
+				2225B77D22B9B26700B71AA2 /* CoreMedia.framework */,
+				2225B77B22B9B24600B71AA2 /* CoreGraphics.framework */,
+				2225B77922B9B21500B71AA2 /* CoreFoundation.framework */,
+				2225B77722B9B1AE00B71AA2 /* AVFoundation.framework */,
+				2225B77522B9B0AB00B71AA2 /* OpenCL.framework */,
+				2225B77322B9B0A500B71AA2 /* Accelerate.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		229703DA223E2DED00240DF2 = {
 			isa = PBXGroup;
 			children = (
+				2225B77022B9B02600B71AA2 /* opencv2.framework */,
 				229703E5223E2DED00240DF2 /* ObjectDection */,
 				229703E4223E2DED00240DF2 /* Products */,
+				2225B77222B9B0A500B71AA2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -88,6 +156,9 @@
 		229703DB223E2DED00240DF2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					New,
+				);
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "matthew hallberg";
 				TargetAttributes = {
@@ -243,31 +314,15 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TJ3U68QPD9;
-				HEADER_SEARCH_PATHS = /usr/local/Cellar/opencv/4.0.1/include/opencv4;
-				INFOPLIST_FILE = "$(SRCROOT)/test/Info.plist";
-				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/opencv/4.0.1/lib;
-				OTHER_LDFLAGS = (
-					"-lopencv_core",
-					"-lopencv_flann",
-					"-lopencv_imgproc",
-					"-lopencv_photo",
-					"-lopencv_video",
-					"-lopencv_imgcodecs",
-					"-lopencv_videoio",
-					"-lopencv_highgui",
-					"-lopencv_xfeatures2d",
-					"-lopencv_features2d",
-					"-lopencv_calib3d",
-					"-lopencv_videostab",
-					"-lopencv_superres",
-					"-lopencv_stitching",
-					"-lopencv_shape",
-					"-lopencv_objdetect",
-					"-lopencv_ml",
-					"-lopencv_dnn",
-					"-lopencv_tracking",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "";
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.matt.opencvC--Test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 			};
 			name = Debug;
 		};
@@ -276,31 +331,15 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TJ3U68QPD9;
-				HEADER_SEARCH_PATHS = /usr/local/Cellar/opencv/4.0.1/include/opencv4;
-				INFOPLIST_FILE = "$(SRCROOT)/test/Info.plist";
-				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/opencv/4.0.1/lib;
-				OTHER_LDFLAGS = (
-					"-lopencv_core",
-					"-lopencv_flann",
-					"-lopencv_imgproc",
-					"-lopencv_photo",
-					"-lopencv_video",
-					"-lopencv_imgcodecs",
-					"-lopencv_videoio",
-					"-lopencv_highgui",
-					"-lopencv_xfeatures2d",
-					"-lopencv_features2d",
-					"-lopencv_calib3d",
-					"-lopencv_videostab",
-					"-lopencv_superres",
-					"-lopencv_stitching",
-					"-lopencv_shape",
-					"-lopencv_objdetect",
-					"-lopencv_ml",
-					"-lopencv_dnn",
-					"-lopencv_tracking",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "";
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.matt.opencvC--Test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 			};
 			name = Release;
 		};
