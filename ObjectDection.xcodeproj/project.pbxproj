@@ -20,7 +20,8 @@
 		2225B78B22B9B7FD00B71AA2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B78A22B9B7FD00B71AA2 /* QuartzCore.framework */; };
 		2225B79022B9BB4A00B71AA2 /* MediaAccessibility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B78C22B9B82B00B71AA2 /* MediaAccessibility.framework */; };
 		2225B79422B9BB7B00B71AA2 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2225B79322B9BB7B00B71AA2 /* AppKit.framework */; };
-		229703E7223E2DED00240DF2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 229703E6223E2DED00240DF2 /* main.cpp */; };
+		22454E6222E450FB009BE797 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22454E6122E450FB009BE797 /* main.cpp */; };
+		229703E7223E2DED00240DF2 /* objects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 229703E6223E2DED00240DF2 /* objects.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,9 +54,10 @@
 		2225B78D22B9B82B00B71AA2 /* MediaLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaLibrary.framework; path = System/Library/Frameworks/MediaLibrary.framework; sourceTree = SDKROOT; };
 		2225B79122B9BB4B00B71AA2 /* MediaToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaToolbox.framework; path = System/Library/Frameworks/MediaToolbox.framework; sourceTree = SDKROOT; };
 		2225B79322B9BB7B00B71AA2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		22454E6122E450FB009BE797 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		226B07CE22DAB03200F10208 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		229703E3223E2DED00240DF2 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
-		229703E6223E2DED00240DF2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		229703E6223E2DED00240DF2 /* objects.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = objects.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,8 +128,9 @@
 		229703E5223E2DED00240DF2 /* ObjectDection */ = {
 			isa = PBXGroup;
 			children = (
-				229703E6223E2DED00240DF2 /* main.cpp */,
+				229703E6223E2DED00240DF2 /* objects.cpp */,
 				226B07CE22DAB03200F10208 /* Info.plist */,
+				22454E6122E450FB009BE797 /* main.cpp */,
 			);
 			path = ObjectDection;
 			sourceTree = "<group>";
@@ -191,7 +194,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				229703E7223E2DED00240DF2 /* main.cpp in Sources */,
+				22454E6222E450FB009BE797 /* main.cpp in Sources */,
+				229703E7223E2DED00240DF2 /* objects.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
